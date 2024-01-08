@@ -1,0 +1,391 @@
+---
+title: "Data Cleaning and Queries"
+author: "Connor Ward"
+date: "10/11/2023"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r packages}
+library(readxl)
+library(janitor)
+library(dplyr)
+library(ggplot2)
+library(stringr)
+```
+
+```{r}
+data = read_excel("Data4700 Americorp Data.xlsx")
+#data = data[-c(585),]
+#data$Date = as.numeric(data$Date)
+```
+
+```{r}
+str(data)
+```
+
+```{r lowercase}
+data[[4]] <- tolower(data[[4]])
+data[[5]] <- tolower(data[[5]])
+data[[7]] <- tolower(data[[7]])
+data[[8]] <- tolower(data[[8]])
+data$`Resource Connections/Need Alleviated` = tolower(data$`Resource Connections/Need Alleviated`)
+```
+
+```{r change_NAs}
+data$`Interaction (Group/Individual)` = 
+  ifelse(data$`Interaction (Group/Individual)`=="n/a", "na", data$`Interaction (Group/Individual)`)
+
+data$`SDOH Screening` =
+  ifelse(data$`SDOH Screening`=="n/a", "na", data$`SDOH Screening`)
+
+data$`Resource Connections/Need Alleviated` = 
+  ifelse(data$`Resource Connections/Need Alleviated`=="n/a", "na", data$`Resource Connections/Need Alleviated`)
+
+data$`Num Goals Identified` = 
+  ifelse(data$`Num Goals Identified`=="n/a", "na", data$`Num Goals Identified`)
+```
+
+```{r spelling}
+data$`Interaction (Group/Individual)` = 
+  ifelse(data$`Interaction (Group/Individual)`=="adminstrative help", 
+         "administrative help", data$`Interaction (Group/Individual)`)
+
+data$`Interaction (Group/Individual)` = 
+  ifelse(data$`Interaction (Group/Individual)`=="triaining", 
+         "training", data$`Interaction (Group/Individual)`)
+
+data$`Interaction (Group/Individual)` = 
+  ifelse(data$`Interaction (Group/Individual)`=="indivdual", 
+         "individual", data$`Interaction (Group/Individual)`)
+
+data$`Interaction (Group/Individual)` = 
+  ifelse(data$`Interaction (Group/Individual)`=="client counsel", 
+         "client counseling", data$`Interaction (Group/Individual)`) 
+
+new_data = new_data %>%
+  mutate(`Information on Interaction` = 
+           str_replace_all(`Information on Interaction`, "blalance", "balance"))
+
+new_data = new_data %>%
+  mutate(`Information on Interaction` = 
+           str_replace_all(`Information on Interaction`, "activty", "activity"))
+```
+
+```{r cleaning}
+new_data =
+  data %>%
+  mutate(`Information on Interaction` = 
+           ifelse(str_detect(`Information on Interaction`, "12 step"), 
+                  "12 steps", `Information on Interaction`))
+
+new_data=
+new_data %>%
+mutate(`Information on Interaction` = 
+         ifelse(str_detect(`Information on Interaction`, "assisted a client"),
+                "assisted client", `Information on Interaction`))
+
+new_data=
+new_data %>%
+mutate(`Information on Interaction` = 
+         ifelse(str_detect(`Information on Interaction`, "assisted client"),
+                "assisted client", `Information on Interaction`))
+
+new_data=
+new_data %>%
+mutate(`Information on Interaction` = 
+         ifelse(str_detect(`Information on Interaction`, "helped client"),
+                "assisted client", `Information on Interaction`))
+
+new_data=
+new_data %>%
+mutate(`Information on Interaction` = 
+         ifelse(str_detect(`Information on Interaction`, "helped a client"),
+                "assisted client", `Information on Interaction`))
+
+new_data=
+new_data %>%
+mutate(`Information on Interaction` = 
+         ifelse(str_detect(`Information on Interaction`, "anger management"),
+                "anger management", `Information on Interaction`))
+
+new_data=
+new_data %>%
+mutate(`Information on Interaction` = 
+         ifelse(str_detect(`Information on Interaction`, "anger management"),
+                "anger management", `Information on Interaction`))
+new_data=
+new_data %>%
+mutate(`Information on Interaction` = 
+         ifelse(str_detect(`Information on Interaction`, "drug"),
+                "drug/alcohol education", `Information on Interaction`))
+new_data=
+new_data %>%
+mutate(`Information on Interaction` = 
+         ifelse(str_detect(`Information on Interaction`, "family matter"),
+                "family matters", `Information on Interaction`))
+
+new_data=
+new_data %>%
+mutate(`Information on Interaction` = 
+         ifelse(str_detect(`Information on Interaction`, "living in balance"),
+                "living in balance", `Information on Interaction`))
+
+new_data=
+new_data %>%
+mutate(`Information on Interaction` = 
+         ifelse(str_detect(`Information on Interaction`, "living skills"),
+                "living skills", `Information on Interaction`))
+
+new_data=
+new_data %>%
+mutate(`Information on Interaction` = 
+         ifelse(str_detect(`Information on Interaction`, "structured activity"),
+                "structured activity", `Information on Interaction`))
+
+new_data=
+new_data %>%
+mutate(`Information on Interaction` = 
+         ifelse(str_detect(`Information on Interaction`, "men's group"),
+                "men's group activity", `Information on Interaction`))
+
+new_data=
+new_data %>%
+mutate(`Information on Interaction` = 
+         ifelse(str_detect(`Information on Interaction`, "men's wellness group"),
+                "men's group activity", `Information on Interaction`))
+
+new_data=
+new_data %>%
+mutate(`Information on Interaction` = 
+         ifelse(str_detect(`Information on Interaction`, "mens group"),
+                "men's group activity", `Information on Interaction`))
+new_data=
+new_data %>%
+mutate(`Information on Interaction` = 
+         ifelse(str_detect(`Information on Interaction`, "one one one"),
+                "one on one with client", `Information on Interaction`))
+new_data=
+new_data %>%
+mutate(`Information on Interaction` = 
+         ifelse(str_detect(`Information on Interaction`, "one on one"),
+                "one on one with client", `Information on Interaction`))
+new_data=
+new_data %>%
+mutate(`Information on Interaction` = 
+         ifelse(str_detect(`Information on Interaction`, "relapse prevention"),
+                "relapse prevention", `Information on Interaction`))
+new_data=
+new_data %>%
+mutate(`Information on Interaction` = 
+         ifelse(str_detect(`Information on Interaction`, "research"),
+                "research for client", `Information on Interaction`))
+new_data=
+new_data %>%
+mutate(`Information on Interaction` = 
+         ifelse(str_detect(`Information on Interaction`, "role play"),
+                "role play", `Information on Interaction`))
+new_data=
+new_data %>%
+mutate(`Information on Interaction` = 
+         ifelse(str_detect(`Information on Interaction`, "supervision"),
+                "supervision meeting", `Information on Interaction`))
+new_data=
+new_data %>%
+mutate(`Information on Interaction` = 
+         ifelse(str_detect(`Information on Interaction`, "wellness"),
+                "wellness", `Information on Interaction`))
+
+temp_q1 = 
+new_data %>%
+  filter(!is.na(`Num Clients`)) %>%
+  group_by(`Information on Interaction`) %>%
+  summarise(Needs = first(`Information on Interaction`), 
+            `Total Clients` = sum(`Num Clients`),
+            Rows = n()) %>%
+  select(Needs, `Total Clients`, Rows) %>%
+  filter(!is.na(Needs)) %>%
+  arrange(desc(Rows))
+```
+
+```{r}
+new_data=
+new_data %>%
+mutate(`SDOH Screening` = 
+         ifelse(str_detect(`SDOH Screening`, "communication"),
+                "communication", `SDOH Screening`))
+
+new_data=
+new_data %>%
+mutate(`SDOH Screening` = 
+         ifelse(str_detect(`SDOH Screening`, "coping skills"),
+                "coping skills", `SDOH Screening`))
+
+new_data=
+new_data %>%
+mutate(`SDOH Screening` = 
+         ifelse(str_detect(`SDOH Screening`, "life skills -"),
+                "life skills", `SDOH Screening`))
+
+new_data=
+new_data %>%
+mutate(`SDOH Screening` = 
+         ifelse(str_detect(`SDOH Screening`, "mental health"),
+                "mental health", `SDOH Screening`))
+
+new_data=
+new_data %>%
+mutate(`SDOH Screening` = 
+         ifelse(str_detect(`SDOH Screening`, "prevention"),
+                "substance prevention", `SDOH Screening`))
+
+sdoh[5,2] = sdoh[5,2]+13#structural
+sdoh[6,2] = sdoh[6,2]+5#life skill
+sdoh[7,2] = sdoh[7,2]+1#wellness
+sdoh[10,2] = sdoh[10,2]+1#mindfull
+sdoh[11,2] = sdoh[11,2]+12#educ
+sdoh[13,2] = sdoh[13,2]+9#housing
+sdoh = sdoh %>% arrange(desc(Rows))
+```
+
+
+```{r rewrite_data}
+#openxlsx:: write.xlsx(data, 'Data4700 Americorp Data COPY.xlsx')
+```
+
+
+
+Queries
+```{r}
+q1 = 
+  data %>%
+  filter(!is.na(`Num Clients`)) %>%
+  group_by(`Information on Interaction`) %>%
+  summarise(Needs = first(`Information on Interaction`), 
+            `Total Clients` = sum(`Num Clients`),
+            Rows = n()) %>%
+  select(Needs, `Total Clients`, Rows) %>%
+  filter(!is.na(Needs)) %>%
+  arrange(desc(Rows))
+```
+
+```{r}
+sdoh = 
+  new_data %>%
+  filter(!is.na(`Num Clients`)) %>%
+  group_by(`SDOH Screening`) %>%
+  summarise(Needs = first(`SDOH Screening`),
+            Rows = n()) %>%
+  select(Needs, Rows) %>%
+  filter(!grepl("^na$", Needs)) %>%
+  arrange(desc(Rows))
+```
+
+```{r}
+q2 =
+  data %>%
+  #filter(!`Num Clients` == 0) %>%
+  mutate(Category = ifelse(grepl("individual", `Interaction (Group/Individual)`, 
+                                 ignore.case = TRUE) 
+                           | (`Num Clients` < 2), "Individual", "Group")) %>%
+  group_by(Category) %>%
+  summarise(Rows = n()) %>%
+  filter(Rows > 0 & !is.na(Category))
+
+q2
+```
+
+```{r}
+q2_new =
+  data %>%
+  filter(!`Num Clients` == 0) %>%
+  mutate(Category = ifelse(grepl("individual", `Interaction (Group/Individual)`, 
+                                 ignore.case = TRUE) 
+                           | (`Num Clients` < 2), "Individual", "Group")) %>%
+  group_by(Category) %>%
+  summarise(Rows = n()) %>%
+  filter(Rows > 0 & !is.na(Category))
+q2_new
+```
+
+
+```{r}
+#how many people set goals versus how many people completed an SDOH assessment versus how many did both
+
+data %>%
+  filter(`Num Goals Identified` > 0 & `Num Goals Identified` != "na") %>%
+  summarize(count = n())
+
+data %>%
+  filter(`SDOH Screening` != "na") %>%
+  summarize(count = n())
+
+data %>%
+  filter(`Num Goals Identified` > 0 & `Num Goals Identified` != "na" & `SDOH Screening` != "na") %>%
+  summarize(count = n())
+```
+
+```{r}
+q4 = 
+  data %>%
+  group_by(Goals_Identified = ifelse(is.na(`Num Goals Identified`), NA, `Num Goals Identified`)) %>%
+  summarise(Count = sum(!is.na(`Num Goals Identified`))) %>%
+  filter(!is.na(Goals_Identified) & Goals_Identified != "na")
+
+q4
+```
+
+Query Graphing
+
+Q1
+```{r}
+q1_data = head(temp_q1, 10)
+#q1_data = q1_data[-c(1, 10),]
+ggplot(q1_data, aes(x = Rows, y = reorder(Needs, Rows))) +
+  geom_bar(stat = "identity", fill = "cornflowerblue") +
+  labs(title = "Top 10 Employee Activities",
+       x = "Count",
+       y = "Client Needs") +
+  geom_text(aes(label = Rows, hjust=1, vjust=.25))+
+  theme_minimal()
+```
+
+SDOH
+```{r}
+sdoh_data = head(sdoh, 10)
+ggplot(sdoh_data, aes(x = Rows, y = reorder(Needs, Rows))) +
+  geom_bar(stat = "identity", fill = "cornflowerblue") +
+  labs(title = "Top 10 Client Needs",
+       x = "Count",
+       y = "Client Needs") +
+  geom_text(aes(label = Rows, hjust=1, vjust=.25))+
+  theme_minimal()
+```
+
+
+Q2
+```{r}
+percent = as.character(round(100*q2_new$Rows/sum(q2_new$Rows), 1))
+labels=c("indianred3", "cornflowerblue")
+pie(q2_new$Rows, labels = paste(q2_new$Rows, "(", percent, "%)"), col=labels,
+    main="Ratio of Group vs Individual Meetings")
+legend("topright", q2_new$Category, cex = .8, fill=labels)
+```
+
+Q3
+```{r}
+
+```
+
+Q4
+```{r}
+percent = as.character(round(100*q4$Count/sum(q4$Count), 1))
+labels=c("indianred3", "cornflowerblue", "green")
+pie(q4$Count, labels = paste(q4$Count, "(", percent, "%)"), col=labels,
+    main="Ratio of Number of Goals Set")
+legend("topright", q4$Goals_Identified, cex = .8, fill=labels)
+```
+
